@@ -13,6 +13,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [AppComponent, FooterComponent, HeaderComponent],
@@ -23,7 +25,9 @@ import { environment } from '../environments/environment';
     HomeModule,
     AuthModule,
     AppRoutingModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    StoreModule.forRoot({}, {}),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
