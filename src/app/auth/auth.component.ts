@@ -1,8 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 import { Errors, UserService } from '../core';
+
+import { selectAuthErrors, selectAuthStatusInProgress } from './state/state';
+import { AuthActions } from './state/actions';
 
 @Component({
   selector: 'app-auth-page',
@@ -10,24 +15,29 @@ import { Errors, UserService } from '../core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuthComponent implements OnInit {
-  authType: String = '';
+  authType: string = '';
   title: String = '';
-  errors: Errors = {errors: {}};
-  isSubmitting = false;
   authForm: FormGroup;
+
+  errors$: Observable<Errors>;
+  isSubmitting$: Observable<boolean>;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
     private fb: FormBuilder,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private store: Store
   ) {
     // use FormBuilder to create a form group
     this.authForm = this.fb.group({
       'email': ['', Validators.required],
       'password': ['', Validators.required]
     });
+
+    this.errors$ = store.select(selectAuthErrors);
+    this.isSubmitting$ = store.select(selectAuthStatusInProgress);
   }
 
   ngOnInit() {
@@ -40,24 +50,19 @@ export class AuthComponent implements OnInit {
       if (this.authType === 'register') {
         this.authForm.addControl('username', new FormControl());
       }
+
+      this.store.dispatch(AuthActions.enterPage());
       this.cd.markForCheck();
     });
   }
 
   submitForm() {
-    this.isSubmitting = true;
-    this.errors = {errors: {}};
-
     const credentials = this.authForm.value;
-    this.userService
-    .attemptAuth(this.authType, credentials)
-    .subscribe(
-      data => this.router.navigateByUrl('/'),
-      err => {
-        this.errors = err;
-        this.isSubmitting = false;
-        this.cd.markForCheck();
-      }
-    );
+
+    if (this.authType === 'login') {
+      this.store.dispatch(AuthActions.signIn({ credentials }));
+    } else {
+      this.store.dispatch(AuthActions.singUp({ credentials }));
+    }
   }
 }

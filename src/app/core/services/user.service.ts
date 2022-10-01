@@ -5,6 +5,7 @@ import { ApiService } from './api.service';
 import { JwtService } from './jwt.service';
 import { User } from '../models';
 import { map ,  distinctUntilChanged } from 'rxjs/operators';
+import { LoginUser, NewUser } from '../models/auth.model';
 
 
 @Injectable({
@@ -56,7 +57,7 @@ export class UserService {
     this.isAuthenticatedSubject.next(false);
   }
 
-  attemptAuth(type, credentials): Observable<User> {
+  attemptAuth(type: string, credentials: NewUser | LoginUser): Observable<User> {
     const route = (type === 'login') ? '/login' : '';
     return this.apiService.post(`/users${route}`, {user: credentials})
       .pipe(map(

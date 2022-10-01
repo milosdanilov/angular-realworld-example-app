@@ -8,9 +8,9 @@
           <a [routerLink]="['/login']" *ngIf="authType === 'register'">Have an account?</a>
           <a [routerLink]="['/register']" *ngIf="authType === 'login'">Need an account?</a>
         </p>
-        <app-list-errors [errors]="errors"></app-list-errors>
+        <app-list-errors [errors]="errors$ | async"></app-list-errors>
         <form [formGroup]="authForm" (ngSubmit)="submitForm()">
-          <fieldset [disabled]="isSubmitting">
+          <fieldset [disabled]="isSubmitting$ | async">
             <fieldset class="form-group">
               <input
                 formControlName="username"
