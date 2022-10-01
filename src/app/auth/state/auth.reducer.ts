@@ -23,28 +23,28 @@ export const initialState: State = {
 
 export const reducer = createReducer(
   initialState,
-  on(AuthActions.enterPage, (state) => {
+  on(AuthActions.enterPage, (state): State => {
     return {
       ...state,
       status: Status.INIT,
       errors: noErrors
     }
   }),
-  on(AuthActions.singUp, AuthActions.signIn, (state) => {
+  on(AuthActions.singUp, AuthActions.signIn, (state): State => {
     return {
       ...state,
       status: Status.IN_PROGRESS,
       errors: noErrors
     }
   }),
-  on(AuthApiActions.userSignedUpSuccess, AuthApiActions.userSignedInSuccess, (state, action) => {
+  on(AuthApiActions.userSignedUpSuccess, AuthApiActions.userSignedInSuccess, (state, action): State => {
     return {
       ...state,
       status: Status.INIT,
       user: action.user
     }
   }),
-  on(AuthApiActions.userSignedUpError, AuthApiActions.userSignedInError, (state, action) => {
+  on(AuthApiActions.userSignedUpError, AuthApiActions.userSignedInError, (state, action): State => {
     return {
       ...state,
       status: Status.INIT,
