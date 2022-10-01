@@ -1,10 +1,10 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-import { Errors, UserService } from '../core';
+import { Errors } from '../core';
 
 import { selectAuthErrors, selectAuthStatusInProgress } from './state/state';
 import { AuthActions } from './state/actions';
@@ -24,8 +24,6 @@ export class AuthComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
-    private userService: UserService,
     private fb: FormBuilder,
     private cd: ChangeDetectorRef,
     private store: Store
