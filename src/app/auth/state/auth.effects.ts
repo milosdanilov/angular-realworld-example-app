@@ -23,7 +23,6 @@ export class AuthEffects {
           .attemptAuth('sign-up', credentials)
           .pipe(
             map(user => AuthApiActions.userSignedUpSuccess({ user })),
-            tap(() => this.router.navigateByUrl('/')),
             catchError((errors: Errors) => of(AuthApiActions.userSignedUpError({ errors })))
           )
       })
@@ -38,11 +37,17 @@ export class AuthEffects {
           .attemptAuth('login', credentials)
           .pipe(
             map(user => AuthApiActions.userSignedInSuccess({ user })),
-            tap(() => this.router.navigateByUrl('/')),
             catchError((errors: Errors) => of(AuthApiActions.userSignedInError({ errors })))
           )
       })
     )
   });
+
+  navigateToRootOnSuccessfulSign$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(AuthApiActions.userSignedUpSuccess, AuthApiActions.userSignedInSuccess),
+      tap(() => this.router.navigateByUrl('/'))
+    )
+  }, { dispatch: false })
 
 }
