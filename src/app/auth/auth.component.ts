@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 import { Errors } from '../core';
 
-import { selectAuthErrors, selectAuthStatusInProgress } from './state/state';
+import { selectAuthErrors, selectAuthStatusInProgress } from './state/auth.selectors';
 import { AuthActions } from './state/actions';
 
 @Component({

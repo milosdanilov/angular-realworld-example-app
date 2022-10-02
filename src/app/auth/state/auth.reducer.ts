@@ -1,6 +1,8 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { Action, createFeature, createReducer, on } from '@ngrx/store';
 import { AuthActions, AuthApiActions } from './actions';
 import { Errors, User } from '../../core';
+
+export const authFeatureKey = 'auth';
 
 export enum Status {
   INIT = 'INIT',
@@ -52,7 +54,3 @@ export const reducer = createReducer(
     }
   })
 );
-
-export const selectUser = (state: State) => state.user;
-export const selectErrors = (state: State) => state.errors;
-export const selectStatusInProgress = (state: State) => state.status === Status.IN_PROGRESS;
